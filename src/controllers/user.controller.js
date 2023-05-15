@@ -97,8 +97,10 @@ const getRegisterFailiure = (req, res) => {
 };
 
 const logOut = (req, res) => {
+  const username = req.user.username;
+
   req.logout(() => {
-    return res.render("logout");
+    return res.render("logout", { username });
   });
 };
 

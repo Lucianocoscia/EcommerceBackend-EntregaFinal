@@ -52,6 +52,7 @@ const getAllProducts = async (req, res) => {
 
     res.json(response);
   } catch (error) {
+    throw new Error("Error al buscar todos los productos ");
     res.json(error);
   }
 };

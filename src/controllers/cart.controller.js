@@ -1,13 +1,14 @@
 import ContenedorMongo from "../classes/ContenedorMongo.js";
 import config from "../config/config.js";
 import logger from "../lib/logger.js";
-
+import { Orders } from "../models/orders.model.js";
 import { Product } from "../models/product.model.js";
 import { SendMails } from "../services/nodemailer.js";
 import CartDaoFactory from "../daos/cartDaoFactory.js";
 
 const productApi = new ContenedorMongo(Product);
 const cartDao = CartDaoFactory.getDao(config.db);
+const orderApi = new ContenedorMongo(Orders);
 
 const createCart = async (req, res, next) => {
   try {
@@ -116,7 +117,7 @@ const deleteProductInCart = async (req, res, next) => {
   }
 };
 
-//funcion para decrementar cantidad
+//funcion para restar cantidad
 const decrementQty = async (req, res, next) => {
   try {
     const { productId } = req.params;
@@ -154,16 +155,54 @@ const decrementQty = async (req, res, next) => {
   }
 };
 
-//revisar por q no me renderiza la view
+const emptyCart = async (req, res, next) => {
+  try {
+    const cart = await cartDao.getByFilter({
+      username: req.session.passport.user.username,
+    });
+
+    cart.products = [];
+
+    const cartupdated = await cartDao.update(
+      { username: req.session.passport.user.username },
+      cart
+    );
+    console.log(cart);
+
+    res.render("cart", { cartupdated });
+    res.redirect("/productos");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const finish = async (req, res, next) => {
   try {
     const { user } = req.session.passport;
     const cart = await cartDao.getByFilter({
       username: user.username,
     });
-    SendMails.sendMailCart({ cart, user });
+    const orders = await orderApi.getAll();
+    const date = new Date();
 
-    res.render("finish-order", { user });
+    const orderToSend = {
+      user: cart.username,
+      products: cart.products,
+      orderNumber: orders.length + 1,
+      email: cart.email,
+      time: date.toUTCString(),
+    };
+    console.log(orderToSend);
+    orderApi.save(orderToSend);
+
+    SendMails.sendMailCart({ orderToSend });
+
+    await cartDao.update(
+      { username: cart.username },
+      { products: [], username: cart.username }
+    );
+
+    res.render("finish-order", { user: user.username });
     res.sendStatus(200);
   } catch (err) {
     logger.error({ error: err }, "Error finish order");
@@ -181,4 +220,5 @@ export const cartController = {
   finish,
   deleteProductInCart,
   decrementQty,
+  emptyCart,
 };

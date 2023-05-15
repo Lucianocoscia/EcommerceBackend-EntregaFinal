@@ -2,7 +2,7 @@ import express, { json, urlencoded } from "express";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { engine } from "express-handlebars";
-import router from "./routes/index.js"; //importo rutas
+import router from "./routes/index.js";
 import { Server as IOServer } from "socket.io";
 import dotenv from "dotenv";
 import yargs from "yargs";
@@ -10,11 +10,11 @@ import session from "express-session";
 import mongoose from "mongoose";
 import passport from "passport";
 import { passportStrategies } from "./lib/passport.lib.js";
-import { User } from "./models/user.model.js"; // importo el modelo de mongodb
-import { Chat } from "./models/chat.model.js"; // importo el modelo de mongodb
-import { authMiddlewares } from "./middleware/invalidURL.middleware.js"; // importo middlewares
-import logger from "./lib/logger.js"; //pino
-import ProductDaoFactory from "./daos/productDaoFactory.js"; //persistencia factory
+import { User } from "./models/user.model.js";
+import { Chat } from "./models/chat.model.js";
+import { authMiddlewares } from "./middleware/invalidURL.middleware.js";
+import logger from "./lib/logger.js";
+import ProductDaoFactory from "./daos/productDaoFactory.js";
 import config from "./config/config.js";
 import ContenedorMongo from "./classes/ContenedorMongo.js";
 
@@ -79,10 +79,10 @@ passport.deserializeUser(async (id, done) => {
   done(null, data);
 });
 
-// app.use((req, res, next) => {
-//   logger.info(` Peticion a ${req.url}, con metodo ${req.method}}`);
-//   next();
-// });
+app.use((req, res, next) => {
+  logger.info(` Peticion a ${req.url}, con metodo ${req.method}}`);
+  next();
+});
 
 app.use(router);
 

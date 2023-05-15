@@ -26,25 +26,34 @@
             <h2>{{this.title}}</h2>
             <img src="{{this.thumbnail}}" alt="imagenProducto" width="100">
             <p style="font-weight: bolder;">${{this.price}}</p>
-            <p style="font-weight: bolder;">CANT: {{this.quantity}}</p>
+            <p style="font-weight: bolder;">Cantidad: {{this.quantity}}</p>
+
             <form action="/decrementQty/{{this._id}}" method="POST">
               <input type="hidden" name="title" value="{{this._id}}">
               <button type="submit" class="btn btn-danger">Quitar uno</button>
             </form>
+
             <form class="mt-5" action="/carrito/{{this._id}}" method="POST">
               <input type="hidden" name="title" value="{{this._id}}">
               <button type="submit" class="btn btn-success">Sumar uno</button>
             </form>
+
         </div>
         
         {{/each}}
         {{/if}}
     </ul>
-    <hr>
+
     {{#with cart}}
-    <form action="/carrito/finish/{{this._id}}" method="POST">
-        <button type="submit" name="buy">Comprar</button>
-    </form>
+        <form action="/empycart" method="POST">
+            <button type="submit" class="btn btn-danger" name="empty">Vaciar Carrito</button>
+        </form>
+
+        <form action="/carrito/finish/{{this._id}}" method="POST">
+            <button type="submit" class="btn btn-success" name="buy">Comprar</button>
+        </form>
+
+        <hr>
     {{/with}}
 </div>
 <h3>Lista de productos</h3>
@@ -54,10 +63,11 @@
 {{#each products}}
     <h2>{{this.title}}</h2>
     <img src={{this.thumbnail}} alt="" width="100">
-    <p>Stock: {{this.stock}}</p>
     <p>{{this.price}}</p>
-    <form action="/carrito/{{this._id}}" method="POST">
-        <button type="submit" name="add-to-cart">Agregar al carrito</button>
+
+    <form  action="/carrito/{{this._id}}" method="POST">
+        <button type="submit" class="btn btn-success" name="add-to-cart">Agregar al carrito</button>
     </form>
+
 {{/each}}
 {{/if}}

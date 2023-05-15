@@ -5,7 +5,6 @@ const productSchema = new Schema({
   price: { type: Number, required: true },
   thumbnail: { type: String, required: true },
   category: { type: String },
-  // stock: { type: Number },
 });
 
 export const Product = model("product", productSchema);

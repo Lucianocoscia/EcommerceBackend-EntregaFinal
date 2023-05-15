@@ -1,7 +1,11 @@
-{{#if userChat}}
-{{#each userChat}}
-<div> <strong style="color: blue">{{this.username}}</strong>
-<span style="color: brown">[{{this.time}}]:</span> 
-<em style="color: green; font-style: italic">{{this.message}}</em> </div>
-{{/each}}
-{{/if}}
+<div class="container">
+    {{#if userChat}}
+    {{#each userChat}}
+    <div> <strong style="color: blue">{{this.username}}</strong>
+    <span style="color: brown">[{{this.time}}]:</span> 
+    <em style="color: green; font-style: italic">{{this.message}}</em> </div>
+    {{/each}}
+    {{/if}}
+</div>
+
+

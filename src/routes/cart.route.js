@@ -10,6 +10,8 @@ router
   .post(cartController.updateCart)
   .delete(cartController.deleteProductInCart);
 
+//vaciar carrito
+router.post("/empycart", cartController.emptyCart);
 //ruta creada para poder restar cantidad
 router.post("/decrementQty/:productId", cartController.decrementQty);
 
