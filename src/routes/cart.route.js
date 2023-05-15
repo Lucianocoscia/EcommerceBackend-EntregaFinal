@@ -4,6 +4,8 @@ import { cartController } from "../controllers/cart.controller.js";
 
 const router = Router();
 
+//ver carrito solamente buscandolo por id
+router.get("/cart/:id", cartController.findCartById);
 //Agregar o eliminar productos en carrito por su id
 router
   .route("/carrito/:productId")

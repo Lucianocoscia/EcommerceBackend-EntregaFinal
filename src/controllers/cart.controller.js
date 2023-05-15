@@ -74,9 +74,11 @@ const findAllCarts = async (req, res, next) => {
 const findCartById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const response = await cartDao.getById(id);
+    const userCart = await cartDao.getByFilter({
+      _id: id,
+    });
 
-    return response;
+    res.render("only-cart", { cart: userCart });
   } catch (err) {
     next(err);
   }
