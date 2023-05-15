@@ -1,0 +1,19 @@
+import { Router } from "express";
+
+import { cartController } from "../controllers/cart.controller.js";
+
+const router = Router();
+
+//Agregar o eliminar productos en carrito por su id
+router
+  .route("/carrito/:productId")
+  .post(cartController.updateCart)
+  .delete(cartController.deleteProductInCart);
+
+//ruta creada para poder restar cantidad
+router.post("/decrementQty/:productId", cartController.decrementQty);
+
+//Finalizar compra
+router.post("/carrito/finish/:cartId", cartController.finish);
+
+export const cartRouter = router;
